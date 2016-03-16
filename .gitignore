@@ -1,2 +1,4 @@
 /.cache
 /build
+/dist
+/ltree.egg-info
