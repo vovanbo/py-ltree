@@ -18,7 +18,7 @@ setup(
     url="https://github.com/dvarrazzo/py-ltree",
     packages=['ltree'],
     long_description=read('README.rst'),
-    classifiers=[l.split for l in """
+    classifiers=[l.strip() for l in """
         Development Status :: 3 - Alpha
         Programming Language :: Python :: 2.7
         Topic :: Utilities
