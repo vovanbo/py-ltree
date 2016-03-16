@@ -7,6 +7,7 @@ re_ltree = re.compile('^[a-zA-Z0-9_]+$')
 
 @total_ordering
 class Ltree(tuple):
+    """Wrapper for the Ltree data type."""
     __slots__ = ()
 
     def __new__(cls, *args):
