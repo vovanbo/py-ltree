@@ -24,5 +24,5 @@ setup(
         Intended Audience :: Developers
         License :: OSI Approved :: BSD License
         Topic :: Database
-        """.splitlines() if l],
+        """.splitlines() if l and not l.isspace()],
 )
