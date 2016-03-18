@@ -61,3 +61,12 @@ class Ltree(tuple):
 
     def __str__(self):
         return '.'.join(self)
+
+    def __getslice__(self, i, j):
+        return Ltree(tuple.__getslice__(self, i, j))
+
+    def __getitem__(self, i):
+        if not isinstance(i, slice):
+            return tuple.__getitem__(self, i)
+        else:
+            return Ltree(tuple.__getitem__(self, i))

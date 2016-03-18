@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name="ltree",
-    version="0.0.2",
+    version="0.0.3",
     author="Daniele Varrazzo",
     author_email="daniele.varrazzo@gmail.com",
     description="Python wrapper for the PostgreSQL ltree data type",

@@ -133,3 +133,33 @@ class TestOps:
         assert (None + Ltree('a.b')) == Ltree('a.b')
         assert 42 + Ltree('a.b') + '' == Ltree('42.a.b')
         assert ['c', None, 42] + Ltree('a.b') == Ltree('c.42.a.b')
+
+    def test_getitem(self):
+        assert type(Ltree('a')[0]) is str
+
+        l = Ltree('foo.bar.baz')
+        assert l[0] == 'foo'
+        assert l[1] == 'bar'
+        assert l[2] == 'baz'
+        assert l[-1] == 'baz'
+        assert l[-2] == 'bar'
+        assert l[-3] == 'foo'
+
+        for i in [3, 4, 5, -4, -5]:
+            try:
+                l[i]
+            except IndexError:
+                pass
+            else:
+                assert False
+
+    def test_slice(self):
+        assert type(Ltree()[1:2]) is Ltree
+        assert type(Ltree()[slice(1, 2)]) is Ltree
+
+        l = Ltree('foo.bar.baz')
+        assert l[0:3] == 'foo.bar.baz'
+        assert l[1:2] == 'bar'
+        assert l[1:] == 'bar.baz'
+        assert l[:-1] == 'foo.bar'
+        assert l[0:0] == ''
