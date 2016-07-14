@@ -2,7 +2,7 @@ import re
 from functools import total_ordering
 from collections import Sequence
 
-re_ltree = re.compile('^[a-zA-Z0-9_]+$')
+re_ltree = re.compile(r'^[a-zA-Z0-9_]+$')
 
 
 @total_ordering
