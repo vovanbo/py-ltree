@@ -39,9 +39,6 @@ def register_ltree(conn_or_curs, globally=False, oid=None, array_oid=None):
         LTREEARRAY = ext.new_array_type(array_oid, "LTREEARRAY", LTREE)
         ext.register_type(LTREEARRAY, not globally and conn_or_curs or None)
 
-    # Register the adapter
-    ext.register_adapter(Ltree, ext.QuotedString)
-
 
 def get_oids(conn_or_curs, type_name):
     """Return the lists of OID of a type with given name.
