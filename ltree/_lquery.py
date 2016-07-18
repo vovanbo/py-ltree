@@ -1,7 +1,7 @@
 import re
 from collections import Sequence, namedtuple
 
-re_ltree = re.compile(r'^[a-zA-Z0-9_]+$')
+re_lquery = re.compile(r'^[a-zA-Z0-9_\|]+$')
 
 
 class Star(namedtuple('Star', 'min max')):
@@ -67,7 +67,7 @@ class Lquery(tuple):
             if s is None or s == '':
                 return None
             if isinstance(s, basestring):
-                if re_ltree.match(s):
+                if re_lquery.match(s):
                     return s
 
                 star = Star.parse(s)

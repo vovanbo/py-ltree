@@ -58,3 +58,6 @@ class TestStar:
         assert str(q) == 'foo.bar.*{3}.baz.*{1}'
         q += '*{1}'
         assert str(q) == 'foo.bar.*{3}.baz.*{2}'
+
+    def test_or(self):
+        assert str(Lquery(['foo|bar'])) == 'foo|bar'
