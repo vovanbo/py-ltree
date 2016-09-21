@@ -1,3 +1,4 @@
+import sys
 from ._ltree import Ltree
 
 
@@ -84,8 +85,10 @@ def _solve_conn_curs(conn_or_curs):
         curs = conn.cursor(cursor_factory=ext.cursor)
 
         # Django wrapper
-        if type(conn_or_curs).__name__ == 'CursorDebugWrapper':
-            conn_or_curs = conn_or_curs.cursor
+        mod = sys.modules.get('django.db.backends.utils')
+        if mod is not None:
+            if isinstance(conn_or_curs, mod.CursorWrapper):
+                conn_or_curs = conn_or_curs.cursor
     else:
         conn = conn_or_curs
         curs = conn.cursor(cursor_factory=ext.cursor)
