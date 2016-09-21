@@ -15,4 +15,5 @@ class LqueryMatch(Lookup):
         return '%s ~ %s' % (lhs, rhs), params
 
     def as_sql(self, compiler, connection):
-        raise NotImplementedError("database vendor %s doesn't support Lquery")
+        raise NotImplementedError(
+            "database vendor %s doesn't support Lquery" % connection.vendor)
