@@ -107,7 +107,9 @@ breeze::
     >>> cur.fetchone()[0]
     Ltree('a.b.c')
 
-    >>> cur.execute("select %s::ltree ~ %s::lquery", [Ltree('a.b.c'), Lquery('a.*')])
+    >>> cur.execute(
+    ...     "select %s::ltree ~ %s::lquery",
+    ...     [Ltree('a.b.c'), Lquery('a.*')])
     >>> cur.fetchone()[0]
     True
 
@@ -121,4 +123,4 @@ The ``ltree.django`` module contains some Django helper. Importing it will
 registers the ``lqmatch`` lookup, which can be used to filter a model for
 ``lquery`` matching (the ``~`` operator)::
 
-    objs = MyModel.objects.filter(code=Lquery('a.b.*'))     #doctest: +SKIP
+    objs = MyModel.objects.filter(code__lqmatch=Lquery('a.b.*'))  #doctest: +SKIP
