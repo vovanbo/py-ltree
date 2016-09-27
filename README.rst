@@ -80,27 +80,19 @@ always does the right thing with two stars in a row)::
 Using with psycopg2
 -------------------
 
-``Ltree`` and ``Lquery`` objects can be passed to psycopg2 as as long as they
-are registered using the string adapter (it could have been easier, but `I am
-stupid`__)::
-
-    >>> from psycopg2 import extensions as ext
-    >>> ext.register_adapter(Ltree, lambda x: ext.QuotedString(str(x)))
-    >>> ext.register_adapter(Lquery, lambda x: ext.QuotedString(str(x)))
-
-In order to read ``ltree`` data from PostgreSQL into ``Ltree`` python objects
-you can use the ``ltree.register_ltree()`` function. Because the ``ltree``
-type doesn't have a fixed OID, the function takes a connection or cursor as
-argument to look it up::
+In order to pass ``Ltree`` and ``Lquery`` objects to psycopg2 you can register
+the ltree adapters using the ``ltree.pg.register_ltree()`` function. Because
+the ``ltree`` type doesn't have a fixed OID, the function takes a connection
+or cursor as argument to look it up::
 
     >>> import psycopg2
     >>> cnn = psycopg2.connect('')
 
-    >>> from ltree import register_ltree
-    >>> register_ltree(cnn)
+    >>> import ltree.pg
+    >>> ltree.pg.register_ltree(cnn)
 
-With these two bits together shuttling Ltree back and forth the database is a
-breeze::
+Once the adaptation bits are in place shuttling ``Ltree`` back and forth the
+database is a breeze::
 
     >>> cur = cnn.cursor()
     >>> cur.execute('select %s::ltree', [Ltree('a.b.c')])
@@ -112,8 +104,6 @@ breeze::
     ...     [Ltree('a.b.c'), Lquery('a.*')])
     >>> cur.fetchone()[0]
     True
-
-.. __: https://github.com/psycopg/psycopg2/issues/456
 
 
 Using with Django

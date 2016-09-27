@@ -163,3 +163,11 @@ class TestOps:
         assert l[1:] == 'bar.baz'
         assert l[:-1] == 'foo.bar'
         assert l[0:0] == ''
+
+
+class TestAdapt:
+    def test_adapt(self):
+        import ltree.pg
+        ltree.pg.register_adapter()
+        import psycopg2.extensions as ext
+        assert ext.adapt(Ltree('foo.bar.baz')).getquoted() == "'foo.bar.baz'"

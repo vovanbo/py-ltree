@@ -1,14 +1,25 @@
 import sys
+
+import psycopg2
+import psycopg2.extensions as ext
+
 from ._ltree import Ltree
+from ._lquery import Lquery
+
+
+def register_adapter():
+    """Retigster the ltree adapters globally.
+    """
+    ext.register_adapter(Ltree, adapt_ltree)
+    ext.register_adapter(Lquery, adapt_ltree)
 
 
 def register_ltree(conn_or_curs, globally=False, oid=None, array_oid=None):
     """Register the ltree adapter and typecaster on the connection or cursor.
     """
-    conn, curs, conn_or_curs = _solve_conn_curs(conn_or_curs)
+    register_adapter()
 
-    import psycopg2
-    import psycopg2.extensions as ext
+    conn, curs, conn_or_curs = _solve_conn_curs(conn_or_curs)
 
     if oid is None:
         oid = get_oids(conn_or_curs, 'ltree')
@@ -29,10 +40,6 @@ def register_ltree(conn_or_curs, globally=False, oid=None, array_oid=None):
             array_oid = tuple([x for x in array_oid if x])
 
     # create and register the typecaster
-    def cast_ltree(s, cur):
-        if s is not None:
-            return Ltree(s)
-
     LTREE = ext.new_type(oid, "LTREE", cast_ltree)
     ext.register_type(LTREE, not globally and conn_or_curs or None)
 
@@ -41,10 +48,22 @@ def register_ltree(conn_or_curs, globally=False, oid=None, array_oid=None):
         ext.register_type(LTREEARRAY, not globally and conn_or_curs or None)
 
 
+def adapt_ltree(x):
+    """Convert an ltree into an object implementing the ISQLQuote protocol
+    """
+    return ext.QuotedString(str(x))
+
+
+def cast_ltree(s, cur):
+    """Convert an ltree string representation into an ``Ltree`` object.
+    """
+    if s is not None:
+        return Ltree(s)
+
+
 def get_oids(conn_or_curs, type_name):
     """Return the lists of OID of a type with given name.
     """
-    import psycopg2.extensions as ext
     conn, curs, conn_or_curs = _solve_conn_curs(conn_or_curs)
 
     # Store the transaction status of the connection to revert it after use
@@ -74,9 +93,6 @@ def get_oids(conn_or_curs, type_name):
 def _solve_conn_curs(conn_or_curs):
     """Return the connection and a DBAPI cursor from a connection or cursor.
     """
-    import psycopg2
-    import psycopg2.extensions as ext
-
     if conn_or_curs is None:
         raise psycopg2.ProgrammingError("no connection or cursor provided")
 

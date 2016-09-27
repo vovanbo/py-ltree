@@ -70,3 +70,10 @@ class Ltree(tuple):
             return tuple.__getitem__(self, i)
         else:
             return Ltree(tuple.__getitem__(self, i))
+
+    # this *doesn't* work, because I'm an asshole: see psycopg bug #456
+    # Now I have to write an adapter, register an adapter... sigh.
+    # def __conform__(self, proto):
+    #     import psycopg2.extensions as ext
+    #     if issubclass(proto, ext.ISQLQuote):
+    #         return ext.AsIs("'%s'" % self)
