@@ -2,3 +2,4 @@
 /build
 /dist
 /ltree.egg-info
+*.pyc
